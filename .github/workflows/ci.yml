@@ -22,4 +22,9 @@ jobs:
 
       - name: Build docker container
         run: |
-          docker image build -t codechallenge/taxes:latest docker/
+          docker image build -t jmaster1985/taxes:latest docker/
+
+      - name: Push docker image to DockerHub
+        run: |
+          docker login -u jmaster1985 -p ${{ DOCKER_ACCESS_TOKEN }}
+          docker push jmaster1985/taxes:latest
