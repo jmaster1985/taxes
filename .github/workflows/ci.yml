@@ -15,10 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      - name: Run a multi-line script
+      - name: Build with Maven
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          docker run -it --rm --name maven-taxes -v "$(pwd)":/usr/src/mymaven -w /usr/src/mymaven maven:3.9.2-amazoncorretto-17-debian mvn clean install
