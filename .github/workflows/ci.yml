@@ -15,6 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build with Maven
+      - name: Compile and test
         run: |
-          docker run --rm --name maven-taxes -v "$(pwd)":/usr/src/mymaven -w /usr/src/mymaven maven:3.9.2-amazoncorretto-17-debian mvn clean compile test
+          docker run --rm --name maven-taxes -v "$(pwd)":/usr/src/mymaven -w /usr/src/mymaven maven:3.9.2-amazoncorretto-17-debian mvn clean install
