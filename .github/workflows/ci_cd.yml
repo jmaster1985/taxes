@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    name: Compile, Test and Build Container
     runs-on: ubuntu-latest
 
     steps:
@@ -30,6 +31,8 @@ jobs:
           docker push jmaster1985/taxes:${GITHUB_REF_NAME}-${GITHUB_RUN_NUMBER}
 
   deploy:
+    name: Deploy on Cluster
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
