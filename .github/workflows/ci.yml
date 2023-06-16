@@ -26,5 +26,5 @@ jobs:
 
       - name: Push docker image to DockerHub
         run: |
-          docker login -u jmaster1985 -p ${{ DOCKER_ACCESS_TOKEN }}
+          docker login -u jmaster1985 -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
           docker push jmaster1985/taxes:latest
