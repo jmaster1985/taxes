@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    name: Compile, Test and Build Container
     runs-on: ubuntu-latest
 
     steps:
@@ -29,3 +30,13 @@ jobs:
           docker login -u jmaster1985 -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
           docker push jmaster1985/taxes:${GITHUB_REF_NAME}-${GITHUB_RUN_NUMBER}
           docker push jmaster1985/taxes:latest
+
+  deploy:
+    name: Deploy on Cluster
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy docker container on cluster
+        run: |
+         echo TODO: deploy the docker container jmaster1985/taxes:${GITHUB_REF_NAME}-${GITHUB_RUN_NUMBER} to some cluster...
