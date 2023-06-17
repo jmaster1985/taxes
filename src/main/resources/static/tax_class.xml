@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taxClasses>
+    <taxClass>
+        <title>Basic Tax</title>
+        <key>basic</key>
+        <rate>0.10</rate>
+    </taxClass>
+    <taxClass>
+        <title>Import Tax</title>
+        <key>import</key>
+        <rate>0.05</rate>
+    </taxClass>
+    <taxClass>
+        <title>Exempted</title>
+        <key>exempt</key>
+        <rate>0</rate>
+    </taxClass>
+</taxClasses>
