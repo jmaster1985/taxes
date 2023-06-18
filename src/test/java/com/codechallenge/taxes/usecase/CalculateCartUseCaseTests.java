@@ -1,25 +1,50 @@
 package com.codechallenge.taxes.usecase;
 
+import com.codechallenge.taxes.dataaccess.repository.TaxClassRepository;
+import com.codechallenge.taxes.dataaccess.repository.exception.DataAccessException;
+import com.codechallenge.taxes.exceptionhandler.ExceptionHandler;
 import com.codechallenge.taxes.model.cart.Cart;
 import com.codechallenge.taxes.model.cart.CartItem;
+import com.codechallenge.taxes.model.tax.TaxClass;
 import com.codechallenge.taxes.usecase.exception.UseCaseRunFailedException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @SpringBootTest
 public class CalculateCartUseCaseTests {
-    private final CalculateCartUseCase calculateCartUseCase;
+    private final RoundUpCalculatedTaxUseCase roundUpCalculatedTaxUseCase;
 
     @Autowired
-    public CalculateCartUseCaseTests(CalculateCartUseCase calculateCartUseCase) {
-        this.calculateCartUseCase = calculateCartUseCase;
+    public CalculateCartUseCaseTests(RoundUpCalculatedTaxUseCase roundUpCalculatedTaxUseCase) {
+        this.roundUpCalculatedTaxUseCase = roundUpCalculatedTaxUseCase;
     }
 
     @Test
-    public void calculateCartTest() throws UseCaseRunFailedException {
+    public void calculateCartTest() throws UseCaseRunFailedException, DataAccessException {
+        Cart cart = this.getCart();
+
+        TaxClassRepository taxClassRepository = this.getMockTaxClassRepository();
+        ExceptionHandler exceptionHandler = mock(ExceptionHandler.class);
+
+        CalculateCartItemUseCase calculateCartItemUseCase = new CalculateCartItemUseCase(taxClassRepository, exceptionHandler, this.roundUpCalculatedTaxUseCase);
+        CalculateCartUseCase calculateCartUseCase = new CalculateCartUseCase((calculateCartItemUseCase));
+
+        calculateCartUseCase.run(cart);
+
+        assertEquals(6.7, cart.getSalesTax());
+        assertEquals(74.68, cart.getTotal());
+    }
+
+    private Cart getCart() {
         Cart cart = new Cart();
 
         CartItem cartItem1 = new CartItem();
@@ -47,9 +72,47 @@ public class CalculateCartUseCaseTests {
         cart.getCartItemList().add(cartItem3);
         cart.getCartItemList().add(cartItem4);
 
-        this.calculateCartUseCase.run(cart);
+        return cart;
+    }
 
-        assertEquals(6.7, cart.getSalesTax());
-        assertEquals(74.68, cart.getTotal());
+    private TaxClassRepository getMockTaxClassRepository() throws DataAccessException {
+        TaxClassRepository taxClassRepository = mock(TaxClassRepository.class);
+        when(taxClassRepository.findByKey("basic")).thenReturn(getTaxClassMap().get("basic"));
+        when(taxClassRepository.findByKey("exempt")).thenReturn(getTaxClassMap().get("exempt"));
+        when(taxClassRepository.findByKey("import_basic")).thenReturn(getTaxClassMap().get("import_basic"));
+        when(taxClassRepository.findByKey("import_exempt")).thenReturn(getTaxClassMap().get("import_exempt"));
+
+        return taxClassRepository;
+    }
+
+    private Map<String, TaxClass> getTaxClassMap() {
+        Map<String, TaxClass> taxClassMap = new HashMap<>();
+
+        TaxClass basicTaxClass = new TaxClass();
+        basicTaxClass.setKey("basic");
+        basicTaxClass.setRate(0.10);
+        basicTaxClass.setTitle("Goods which are subject to taxes inland");
+
+        TaxClass exemptTaxClass = new TaxClass();
+        exemptTaxClass.setKey("exempt");
+        exemptTaxClass.setRate(0.0);
+        exemptTaxClass.setTitle("Goods which are exempted from taxation");
+
+        TaxClass importBasicTaxClass = new TaxClass();
+        importBasicTaxClass.setKey("import_basic");
+        importBasicTaxClass.setRate(0.15);
+        importBasicTaxClass.setTitle("Imported goods which are also subject to taxes inland");
+
+        TaxClass importExemptTaxClass = new TaxClass();
+        importExemptTaxClass.setKey("import_exempt");
+        importExemptTaxClass.setRate(0.05);
+        importExemptTaxClass.setTitle("Imported goods which are exempted from taxes inland");
+
+        taxClassMap.put(basicTaxClass.getKey(), basicTaxClass);
+        taxClassMap.put(exemptTaxClass.getKey(), exemptTaxClass);
+        taxClassMap.put(importBasicTaxClass.getKey(), importBasicTaxClass);
+        taxClassMap.put(importExemptTaxClass.getKey(), importExemptTaxClass);
+
+        return taxClassMap;
     }
 }
