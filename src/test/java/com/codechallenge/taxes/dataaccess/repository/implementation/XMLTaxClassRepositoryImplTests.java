@@ -17,12 +17,12 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class XMLTaxClassRepositoryImplTest {
+public class XMLTaxClassRepositoryImplTests {
     private final Environment environment;
     private final TaxClassRepository taxClassRepository;
 
     @Autowired
-    public XMLTaxClassRepositoryImplTest(Environment environment, TaxClassRepository taxClassRepository) {
+    public XMLTaxClassRepositoryImplTests(Environment environment, TaxClassRepository taxClassRepository) {
         this.environment = environment;
         this.taxClassRepository = taxClassRepository;
     }
