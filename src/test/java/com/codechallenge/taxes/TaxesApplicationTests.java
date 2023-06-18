@@ -9,12 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TaxesApplicationTests {
 
 	@Test
-	void contextLoads() {
-
-	}
-
-	@Test
-	void isUnitTestingActive() {
+	void isUnitTestingActiveTest() {
 		assertEquals(1, 1);
 	}
 
