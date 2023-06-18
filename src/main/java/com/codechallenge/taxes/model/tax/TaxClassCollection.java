@@ -1,5 +1,6 @@
-package com.codechallenge.taxes.model;
+package com.codechallenge.taxes.model.tax;
 
+import com.codechallenge.taxes.model.tax.TaxClass;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 

@@ -2,7 +2,8 @@ package com.codechallenge.taxes.dataaccess.repository.implementation;
 
 import com.codechallenge.taxes.dataaccess.repository.TaxClassRepository;
 import com.codechallenge.taxes.dataaccess.repository.exception.DataAccessException;
-import com.codechallenge.taxes.model.TaxClassCollection;
+import com.codechallenge.taxes.model.tax.TaxClass;
+import com.codechallenge.taxes.model.tax.TaxClassCollection;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Unmarshaller;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,18 @@ public class XMLTaxClassRepositoryImpl implements TaxClassRepository {
         } catch (Throwable t) {
             throw new DataAccessException(t);
         }
+    }
+
+    @Override
+    public TaxClass findByKey(String taxClassKey) throws DataAccessException {
+        TaxClassCollection taxClassCollection = this.findAll();
+
+        for (TaxClass taxClass : taxClassCollection.getTaxClassList()) {
+            if (taxClass.getKey().equals(taxClassKey)) {
+                return taxClass;
+            }
+        }
+
+        return null;
     }
 }

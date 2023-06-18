@@ -2,8 +2,8 @@ package com.codechallenge.taxes.dataaccess.repository.implementation;
 
 import com.codechallenge.taxes.dataaccess.repository.TaxClassRepository;
 import com.codechallenge.taxes.dataaccess.repository.exception.DataAccessException;
-import com.codechallenge.taxes.model.TaxClass;
-import com.codechallenge.taxes.model.TaxClassCollection;
+import com.codechallenge.taxes.model.tax.TaxClass;
+import com.codechallenge.taxes.model.tax.TaxClassCollection;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

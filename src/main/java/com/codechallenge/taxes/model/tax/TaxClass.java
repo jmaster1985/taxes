@@ -1,12 +1,14 @@
-package com.codechallenge.taxes.model;
+package com.codechallenge.taxes.model.tax;
 
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @XmlRootElement(name = "taxClass")
 public class TaxClass implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private String title;

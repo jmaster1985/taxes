@@ -1,6 +1,6 @@
 package com.codechallenge.taxes.usecase;
 
-import com.codechallenge.taxes.model.TaxClassCollection;
+import com.codechallenge.taxes.model.tax.TaxClassCollection;
 import com.codechallenge.taxes.usecase.exception.UseCaseRunFailedException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
