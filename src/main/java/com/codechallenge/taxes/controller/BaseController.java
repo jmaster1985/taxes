@@ -1,6 +1,7 @@
 package com.codechallenge.taxes.controller;
 
 import com.codechallenge.taxes.exceptionhandler.ExceptionHandler;
+import com.codechallenge.taxes.usecase.exception.InvalidInputException;
 import com.codechallenge.taxes.usecase.exception.UseCaseRunFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +26,14 @@ public class BaseController {
         String message = null;
 
         if (t instanceof UseCaseRunFailedException) {
-            //TODO: check cause, if user input error then 4XX with cause.getMessage
+            if (t.getCause() instanceof InvalidInputException) {
+                status = HttpStatus.BAD_REQUEST;
+                message = t.getCause().getMessage();
+            }
         } else {
             this.exceptionHandler.handle(t);
         }
 
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(new UnsuccessfulResponse(message), status);
     }
 }
