@@ -37,8 +37,7 @@ public class RoundUpCalculatedTaxUseCase {
             result = intValue + Double.valueOf("0." + firstDigit) + 0.05;
         }
 
-        BigDecimal resultAsBigDecimal = new BigDecimal(result).setScale(2, RoundingMode.HALF_UP);
-        return resultAsBigDecimal.doubleValue();
+        return SanitizeDoubleValueUseCase.run(result);
     }
 
 }

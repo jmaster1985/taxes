@@ -6,9 +6,6 @@ import com.codechallenge.taxes.usecase.exception.UseCaseRunFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 @Service
 public class CalculateCartUseCase {
     private final CalculateCartItemUseCase calculateCartItemUseCase;
@@ -29,11 +26,8 @@ public class CalculateCartUseCase {
             salesTax = salesTax + cartItem.getTotalTaxAmount();
         }
 
-        BigDecimal totalAsBigDecimal = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP);
-        BigDecimal salesTaxBigDecimal = new BigDecimal(salesTax).setScale(2, RoundingMode.HALF_UP);
-
-        cart.setTotal(totalAsBigDecimal.doubleValue());
-        cart.setSalesTax(salesTaxBigDecimal.doubleValue());
+        cart.setTotal(SanitizeDoubleValueUseCase.run(total));
+        cart.setSalesTax(SanitizeDoubleValueUseCase.run(salesTax));
 
         return cart;
     }

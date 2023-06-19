@@ -10,9 +10,6 @@ import com.codechallenge.taxes.usecase.exception.UseCaseRunFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 @Service
 public class CalculateCartItemUseCase {
     private final TaxClassRepository taxClassRepository;
@@ -42,19 +39,15 @@ public class CalculateCartItemUseCase {
             Double roundedTaxAmount = roundUpCalculatedTaxUseCase.run(initialTaxAmount);
 
             Double grossPrice = cartItem.getUnitNetPrice() + roundedTaxAmount;
-            BigDecimal grossPriceAsBigDecimal = new BigDecimal(grossPrice).setScale(2, RoundingMode.HALF_UP);
 
-            cartItem.setUnitGrossPrice(grossPriceAsBigDecimal.doubleValue());
+            cartItem.setUnitGrossPrice(SanitizeDoubleValueUseCase.run(grossPrice));
             cartItem.setUnitTaxAmount(roundedTaxAmount);
 
             Double totalGrossPrice = cartItem.getQuantity() * cartItem.getUnitGrossPrice();
             Double totalTaxAmount = cartItem.getQuantity() * cartItem.getUnitTaxAmount();
 
-            BigDecimal totalGrossPriceAsBigDecimal = new BigDecimal(totalGrossPrice).setScale(2, RoundingMode.HALF_UP);
-            BigDecimal totalTaxAmountAsBigDecimal = new BigDecimal(totalTaxAmount).setScale(2, RoundingMode.HALF_UP);
-
-            cartItem.setTotalGrossPrice(totalGrossPriceAsBigDecimal.doubleValue());
-            cartItem.setTotalTaxAmount(totalTaxAmountAsBigDecimal.doubleValue());
+            cartItem.setTotalGrossPrice(SanitizeDoubleValueUseCase.run(totalGrossPrice));
+            cartItem.setTotalTaxAmount(SanitizeDoubleValueUseCase.run(totalTaxAmount));
         } catch (DataAccessException e) {
             this.exceptionHandler.handle(e);
             throw new UseCaseRunFailedException(e);
