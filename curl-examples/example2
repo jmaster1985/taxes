@@ -1,0 +1,17 @@
+curl --request POST \
+  --url http://localhost:8888/tax/calculate \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"cartItemList": [
+		{
+			"productTitle": "Imported Chocolate Bar",
+			"unitNetPrice": 10,
+			"taxClassKey": "import_exempt"
+		},
+		{
+			"productTitle": "Imported Perfume",
+			"unitNetPrice": 47.50,
+			"taxClassKey": "import_basic"
+		}
+	]
+}'

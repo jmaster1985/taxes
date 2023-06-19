@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taxClasses>
+    <taxClass>
+        <title>Basic Tax</title>
+        <key>basic</key>
+        <rate>0.10</rate>
+    </taxClass>
+    <taxClass>
+        <title>Exempted</title>
+        <key>exempt</key>
+        <rate>0</rate>
+    </taxClass>
+    <taxClass>
+        <title>Additional import tax for goods which are exempted from taxation inland</title>
+        <key>import_exempt</key>
+        <rate>0.05</rate>
+    </taxClass>
+    <taxClass>
+        <title>Additional import tax for goods which are subjected to basic taxation inland</title>
+        <key>import_basic</key>
+        <rate>0.15</rate>
+    </taxClass>
+</taxClasses>

@@ -1,3 +1,3 @@
 FROM tomcat:10-jdk17-temurin-focal
-
-COPY taxes.war /usr/local/tomcat/webapps/
+RUN rm -rf /usr/local/tomcat/webapps.dist/ROOT
+COPY ROOT.war /usr/local/tomcat/webapps/
