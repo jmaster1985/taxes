@@ -9,9 +9,12 @@ public class CartItem implements Serializable {
 
     private String productTitle;
     private String taxClassKey;
-    private Double netPrice;
-    private Double grossPrice;
-    private Double taxAmount;
+    private Double unitNetPrice;
+    private Double unitGrossPrice;
+    private Double unitTaxAmount;
+    private Double totalGrossPrice;
+    private Double totalTaxAmount;
+    private Integer quantity = 1;
 
     public CartItem() {
 
@@ -33,27 +36,51 @@ public class CartItem implements Serializable {
         this.taxClassKey = taxClassKey;
     }
 
-    public Double getNetPrice() {
-        return netPrice;
+    public Double getUnitNetPrice() {
+        return unitNetPrice;
     }
 
-    public void setNetPrice(Double netPrice) {
-        this.netPrice = netPrice;
+    public void setUnitNetPrice(Double unitNetPrice) {
+        this.unitNetPrice = unitNetPrice;
     }
 
-    public Double getGrossPrice() {
-        return grossPrice;
+    public Double getUnitGrossPrice() {
+        return unitGrossPrice;
     }
 
-    public void setGrossPrice(Double grossPrice) {
-        this.grossPrice = grossPrice;
+    public void setUnitGrossPrice(Double unitGrossPrice) {
+        this.unitGrossPrice = unitGrossPrice;
     }
 
-    public Double getTaxAmount() {
-        return taxAmount;
+    public Double getUnitTaxAmount() {
+        return unitTaxAmount;
     }
 
-    public void setTaxAmount(Double taxAmount) {
-        this.taxAmount = taxAmount;
+    public void setUnitTaxAmount(Double unitTaxAmount) {
+        this.unitTaxAmount = unitTaxAmount;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public Double getTotalGrossPrice() {
+        return totalGrossPrice;
+    }
+
+    public void setTotalGrossPrice(Double totalGrossPrice) {
+        this.totalGrossPrice = totalGrossPrice;
+    }
+
+    public Double getTotalTaxAmount() {
+        return totalTaxAmount;
+    }
+
+    public void setTotalTaxAmount(Double totalTaxAmount) {
+        this.totalTaxAmount = totalTaxAmount;
     }
 }

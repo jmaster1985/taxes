@@ -25,8 +25,8 @@ public class CalculateCartUseCase {
         for (CartItem cartItem : cart.getCartItemList()) {
             this.calculateCartItemUseCase.run(cartItem);
 
-            total = total + cartItem.getGrossPrice();
-            salesTax = salesTax + cartItem.getTaxAmount();
+            total = total + cartItem.getTotalGrossPrice();
+            salesTax = salesTax + cartItem.getTotalTaxAmount();
         }
 
         BigDecimal totalAsBigDecimal = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP);

@@ -34,7 +34,7 @@ public class CalculateCartItemUseCaseTests {
 
         CartItem cartItem = new CartItem();
         cartItem.setProductTitle("Imported Perfume");
-        cartItem.setNetPrice(27.99);
+        cartItem.setUnitNetPrice(27.99);
         cartItem.setTaxClassKey("import_basic");
 
         TaxClassRepository taxClassRepository = mock(TaxClassRepository.class);
@@ -45,6 +45,6 @@ public class CalculateCartItemUseCaseTests {
         CalculateCartItemUseCase calculateCartItemUseCase = new CalculateCartItemUseCase(taxClassRepository, exceptionHandler, this.roundUpCalculatedTaxUseCase);
         calculateCartItemUseCase.run(cartItem);
 
-        assertEquals(4.2, cartItem.getTaxAmount());
+        assertEquals(4.2, cartItem.getTotalTaxAmount());
     }
 }

@@ -34,14 +34,27 @@ public class CalculateCartItemUseCase {
                 throw new InvalidInputException("taxClassKey: " + cartItem.getTaxClassKey() + "is invalid! See GET on the endpoint /class for the valid taxClassKeys!");
             }
 
-            Double initialTaxAmount = cartItem.getNetPrice() * taxClass.getRate();
+            if (cartItem.getQuantity() < 1) {
+                throw new InvalidInputException("A minimum quantity of 1 is required!");
+            }
+
+            Double initialTaxAmount = cartItem.getUnitNetPrice() * taxClass.getRate();
             Double roundedTaxAmount = roundUpCalculatedTaxUseCase.run(initialTaxAmount);
 
-            Double grossPrice = cartItem.getNetPrice() + roundedTaxAmount;
+            Double grossPrice = cartItem.getUnitNetPrice() + roundedTaxAmount;
             BigDecimal grossPriceAsBigDecimal = new BigDecimal(grossPrice).setScale(2, RoundingMode.HALF_UP);
 
-            cartItem.setGrossPrice(grossPriceAsBigDecimal.doubleValue());
-            cartItem.setTaxAmount(roundedTaxAmount);
+            cartItem.setUnitGrossPrice(grossPriceAsBigDecimal.doubleValue());
+            cartItem.setUnitTaxAmount(roundedTaxAmount);
+
+            Double totalGrossPrice = cartItem.getQuantity() * cartItem.getUnitGrossPrice();
+            Double totalTaxAmount = cartItem.getQuantity() * cartItem.getUnitTaxAmount();
+
+            BigDecimal totalGrossPriceAsBigDecimal = new BigDecimal(totalGrossPrice).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal totalTaxAmountAsBigDecimal = new BigDecimal(totalTaxAmount).setScale(2, RoundingMode.HALF_UP);
+
+            cartItem.setTotalGrossPrice(totalGrossPriceAsBigDecimal.doubleValue());
+            cartItem.setTotalTaxAmount(totalTaxAmountAsBigDecimal.doubleValue());
         } catch (DataAccessException e) {
             this.exceptionHandler.handle(e);
             throw new UseCaseRunFailedException(e);
