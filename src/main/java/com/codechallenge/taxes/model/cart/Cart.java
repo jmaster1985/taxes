@@ -1,5 +1,7 @@
 package com.codechallenge.taxes.model.cart;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,7 +11,10 @@ public class Cart implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Double salesTax = 0.0;
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Double total = 0.0;
     private List<CartItem> cartItemList;
 

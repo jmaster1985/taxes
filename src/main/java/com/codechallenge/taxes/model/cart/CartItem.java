@@ -1,5 +1,7 @@
 package com.codechallenge.taxes.model.cart;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -10,9 +12,17 @@ public class CartItem implements Serializable {
     private String productTitle;
     private String taxClassKey;
     private Double unitNetPrice;
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Double unitGrossPrice;
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Double unitTaxAmount;
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Double totalGrossPrice;
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Double totalTaxAmount;
     private Integer quantity = 1;
 
