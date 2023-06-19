@@ -1,0 +1,22 @@
+curl --request POST \
+  --url http://localhost:8888/tax/calculate \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"cartItemList": [
+		{
+			"productTitle": "Book",
+			"unitNetPrice": 12.49,
+			"taxClassKey": "exempt"
+		},
+		{
+			"productTitle": "CD",
+			"unitNetPrice": 14.99,
+			"taxClassKey": "basic"
+		},
+		{
+			"productTitle": "Chocolate Bar",
+			"unitNetPrice": 0.85,
+			"taxClassKey": "exempt"
+		}
+	]
+}'
