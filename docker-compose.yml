@@ -1,0 +1,30 @@
+version: '3.1'
+
+networks:
+  taxesnet:
+    external: true
+
+services:
+  tomcat:
+    image: codechallenge/taxes:latest
+    ports:
+      - 8888:8080
+    networks:
+      - taxesnet
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0.31
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql8:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - taxesnet
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+
+volumes:
+  mysql8:

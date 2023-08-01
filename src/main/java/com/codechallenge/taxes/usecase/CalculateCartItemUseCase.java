@@ -1,7 +1,6 @@
 package com.codechallenge.taxes.usecase;
 
-import com.codechallenge.taxes.dataaccess.repository.TaxClassRepository;
-import com.codechallenge.taxes.dataaccess.repository.exception.DataAccessException;
+import com.codechallenge.taxes.dataaccess.repository.TaxClassDBRepository;
 import com.codechallenge.taxes.exceptionhandler.ExceptionHandler;
 import com.codechallenge.taxes.model.cart.CartItem;
 import com.codechallenge.taxes.model.tax.TaxClass;
@@ -12,20 +11,24 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CalculateCartItemUseCase {
-    private final TaxClassRepository taxClassRepository;
+    private final TaxClassDBRepository taxClassDBRepository;
     private final ExceptionHandler exceptionHandler;
     private final RoundUpCalculatedTaxUseCase roundUpCalculatedTaxUseCase;
 
     @Autowired
-    public CalculateCartItemUseCase(TaxClassRepository taxClassRepository, ExceptionHandler exceptionHandler, RoundUpCalculatedTaxUseCase roundUpCalculatedTaxUseCase) {
-        this.taxClassRepository = taxClassRepository;
+    public CalculateCartItemUseCase(
+            TaxClassDBRepository taxClassDBRepository,
+            ExceptionHandler exceptionHandler,
+            RoundUpCalculatedTaxUseCase roundUpCalculatedTaxUseCase
+    ) {
+        this.taxClassDBRepository = taxClassDBRepository;
         this.exceptionHandler = exceptionHandler;
         this.roundUpCalculatedTaxUseCase = roundUpCalculatedTaxUseCase;
     }
 
     public void run(CartItem cartItem) throws UseCaseRunFailedException {
         try {
-            TaxClass taxClass = taxClassRepository.findByKey(cartItem.getTaxClassKey());
+            TaxClass taxClass = taxClassDBRepository.findOneByKey(cartItem.getTaxClassKey());
 
             if (taxClass == null) {
                 throw new InvalidInputException("taxClassKey: " + cartItem.getTaxClassKey() + "is invalid! See GET on the endpoint /class for the valid taxClassKeys!");
@@ -48,11 +51,11 @@ public class CalculateCartItemUseCase {
 
             cartItem.setTotalGrossPrice(SanitizeDoubleValueUseCase.run(totalGrossPrice));
             cartItem.setTotalTaxAmount(SanitizeDoubleValueUseCase.run(totalTaxAmount));
-        } catch (DataAccessException e) {
-            this.exceptionHandler.handle(e);
-            throw new UseCaseRunFailedException(e);
         } catch (InvalidInputException e) {
             throw new UseCaseRunFailedException(e);
+        } catch (Throwable t) {
+            this.exceptionHandler.handle(t);
+            throw new UseCaseRunFailedException(t);
         }
     }
 }

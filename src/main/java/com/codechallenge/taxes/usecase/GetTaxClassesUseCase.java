@@ -1,8 +1,8 @@
 package com.codechallenge.taxes.usecase;
 
-import com.codechallenge.taxes.dataaccess.repository.TaxClassRepository;
-import com.codechallenge.taxes.dataaccess.repository.exception.DataAccessException;
+import com.codechallenge.taxes.dataaccess.repository.TaxClassDBRepository;
 import com.codechallenge.taxes.exceptionhandler.ExceptionHandler;
+import com.codechallenge.taxes.model.tax.TaxClass;
 import com.codechallenge.taxes.model.tax.TaxClassCollection;
 import com.codechallenge.taxes.usecase.exception.UseCaseRunFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +10,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GetTaxClassesUseCase {
-    private final TaxClassRepository taxClassRepository;
+    private final TaxClassDBRepository taxClassDBRepository;
     private final ExceptionHandler exceptionHandler;
 
     @Autowired
-    public GetTaxClassesUseCase(TaxClassRepository taxClassRepository, ExceptionHandler exceptionHandler) {
-        this.taxClassRepository = taxClassRepository;
+    public GetTaxClassesUseCase(
+            ExceptionHandler exceptionHandler,
+            TaxClassDBRepository taxClassDBRepository
+    ) {
         this.exceptionHandler = exceptionHandler;
+        this.taxClassDBRepository = taxClassDBRepository;
     }
 
     /**
@@ -27,10 +30,17 @@ public class GetTaxClassesUseCase {
      */
     public TaxClassCollection run() throws UseCaseRunFailedException {
         try {
-            return this.taxClassRepository.findAll();
-        } catch (DataAccessException e) {
-            this.exceptionHandler.handle(e);
-            throw new UseCaseRunFailedException(e);
+            Iterable<TaxClass> taxClassIterable = this.taxClassDBRepository.findAll();
+            TaxClassCollection taxClassCollection = new TaxClassCollection();
+
+            for(TaxClass taxClass : taxClassIterable) {
+                taxClassCollection.addTaxClass(taxClass);
+            }
+
+            return taxClassCollection;
+        } catch (Throwable t) {
+            this.exceptionHandler.handle(t);
+            throw new UseCaseRunFailedException(t);
         }
     }
 }

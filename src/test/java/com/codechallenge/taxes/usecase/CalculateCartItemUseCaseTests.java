@@ -1,7 +1,6 @@
 package com.codechallenge.taxes.usecase;
 
-import com.codechallenge.taxes.dataaccess.repository.TaxClassRepository;
-import com.codechallenge.taxes.dataaccess.repository.exception.DataAccessException;
+import com.codechallenge.taxes.dataaccess.repository.TaxClassDBRepository;
 import com.codechallenge.taxes.exceptionhandler.ExceptionHandler;
 import com.codechallenge.taxes.model.cart.CartItem;
 import com.codechallenge.taxes.model.tax.TaxClass;
@@ -26,7 +25,7 @@ public class CalculateCartItemUseCaseTests {
 
 
     @Test
-    public void calculateCartItemUseCaseTest() throws DataAccessException, UseCaseRunFailedException {
+    public void calculateCartItemUseCaseTest() throws UseCaseRunFailedException {
         TaxClass importExemptTaxClass = new TaxClass();
         importExemptTaxClass.setKey("import_basic");
         importExemptTaxClass.setRate(0.15);
@@ -37,8 +36,8 @@ public class CalculateCartItemUseCaseTests {
         cartItem.setUnitNetPrice(27.99);
         cartItem.setTaxClassKey("import_basic");
 
-        TaxClassRepository taxClassRepository = mock(TaxClassRepository.class);
-        when(taxClassRepository.findByKey("import_basic")).thenReturn(importExemptTaxClass);
+        TaxClassDBRepository taxClassRepository = mock(TaxClassDBRepository.class);
+        when(taxClassRepository.findOneByKey("import_basic")).thenReturn(importExemptTaxClass);
 
         ExceptionHandler exceptionHandler = mock(ExceptionHandler.class);
 

@@ -22,4 +22,8 @@ public class TaxClassCollection implements Serializable {
     public List<TaxClass> getTaxClassList() {
         return taxClassList;
     }
+
+    public void addTaxClass(TaxClass taxClass) {
+        this.taxClassList.add(taxClass);
+    }
 }

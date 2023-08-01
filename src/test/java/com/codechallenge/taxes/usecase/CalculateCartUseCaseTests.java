@@ -1,7 +1,6 @@
 package com.codechallenge.taxes.usecase;
 
-import com.codechallenge.taxes.dataaccess.repository.TaxClassRepository;
-import com.codechallenge.taxes.dataaccess.repository.exception.DataAccessException;
+import com.codechallenge.taxes.dataaccess.repository.TaxClassDBRepository;
 import com.codechallenge.taxes.exceptionhandler.ExceptionHandler;
 import com.codechallenge.taxes.model.cart.Cart;
 import com.codechallenge.taxes.model.cart.CartItem;
@@ -29,13 +28,14 @@ public class CalculateCartUseCaseTests {
     }
 
     @Test
-    public void calculateCartTest() throws UseCaseRunFailedException, DataAccessException {
+    public void calculateCartTest() throws UseCaseRunFailedException {
         Cart cart = this.getCart();
 
-        TaxClassRepository taxClassRepository = this.getMockTaxClassRepository();
         ExceptionHandler exceptionHandler = mock(ExceptionHandler.class);
 
-        CalculateCartItemUseCase calculateCartItemUseCase = new CalculateCartItemUseCase(taxClassRepository, exceptionHandler, this.roundUpCalculatedTaxUseCase);
+        TaxClassDBRepository taxClassDBRepository = this.getMockTaxClassDBRepository();
+
+        CalculateCartItemUseCase calculateCartItemUseCase = new CalculateCartItemUseCase(taxClassDBRepository, exceptionHandler, this.roundUpCalculatedTaxUseCase);
         CalculateCartUseCase calculateCartUseCase = new CalculateCartUseCase((calculateCartItemUseCase));
 
         calculateCartUseCase.run(cart);
@@ -75,14 +75,14 @@ public class CalculateCartUseCaseTests {
         return cart;
     }
 
-    private TaxClassRepository getMockTaxClassRepository() throws DataAccessException {
-        TaxClassRepository taxClassRepository = mock(TaxClassRepository.class);
-        when(taxClassRepository.findByKey("basic")).thenReturn(getTaxClassMap().get("basic"));
-        when(taxClassRepository.findByKey("exempt")).thenReturn(getTaxClassMap().get("exempt"));
-        when(taxClassRepository.findByKey("import_basic")).thenReturn(getTaxClassMap().get("import_basic"));
-        when(taxClassRepository.findByKey("import_exempt")).thenReturn(getTaxClassMap().get("import_exempt"));
+    private TaxClassDBRepository getMockTaxClassDBRepository() {
+        TaxClassDBRepository taxClassDBRepository = mock(TaxClassDBRepository.class);
+        when(taxClassDBRepository.findOneByKey("basic")).thenReturn(getTaxClassMap().get("basic"));
+        when(taxClassDBRepository.findOneByKey("exempt")).thenReturn(getTaxClassMap().get("exempt"));
+        when(taxClassDBRepository.findOneByKey("import_basic")).thenReturn(getTaxClassMap().get("import_basic"));
+        when(taxClassDBRepository.findOneByKey("import_exempt")).thenReturn(getTaxClassMap().get("import_exempt"));
 
-        return taxClassRepository;
+        return taxClassDBRepository;
     }
 
     private Map<String, TaxClass> getTaxClassMap() {
